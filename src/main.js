@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MeshObject } from "./MeshObject";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 // renderer
 const canvas = document.querySelector("#three-canvas");
@@ -48,6 +49,7 @@ const ground = new MeshObject({
   depth: 50,
   color: "#092e66",
   y: -0.05,
+  differenceY: "0",
 });
 
 const floor = new MeshObject({
@@ -56,6 +58,7 @@ const floor = new MeshObject({
   width: 5,
   height: 0.4,
   depth: 5,
+  differenceY: "0",
 });
 
 const wall1 = new MeshObject({
@@ -75,6 +78,21 @@ const wall2 = new MeshObject({
   depth: 4.8,
   x: 2.4,
   z: 0.1,
+});
+
+// GLTF model
+const loader = new GLTFLoader();
+
+const desk = new MeshObject({
+  scene,
+  loader,
+  name: "desk",
+  width: 1.8,
+  height: 0.8,
+  depth: 0.75,
+  x: 1.2,
+  z: -1.9,
+  modelSrc: "/models/desk.glb",
 });
 
 // draw
