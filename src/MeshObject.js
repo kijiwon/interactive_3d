@@ -13,22 +13,31 @@ export class MeshObject {
     this.differenceY = info.differenceY || 0.4; // floor의 높이만큼 올림
     this.y = info.y || this.height / 2 + this.differenceY; // 모든 mesh는 지면에 닿아있어야함
     this.z = info.z || 0;
+    this.rotationX = info.rotationX || 0;
+    this.rotationY = info.rotationY || 0;
+    this.rotationZ = info.rotationZ || 0;
 
     if (info.modelSrc) {
       // GLTF model
       info.loader.load(
         info.modelSrc,
         (glb) => {
-          console.log("loaded");
-          info.scene.add(glb.scene);
+          this.mesh = glb.scene;
+
           // glb model의 속성을 설정하기 위해 traverse로 모든 자식 객체에 접근
-          glb.scene.traverse((child) => {
+          this.mesh.traverse((child) => {
             if (child.isMesh) {
               // mesh 객체에 그림자 속성 적용
               child.castShadow = true;
             }
           });
-          glb.scene.position.set(this.x, this.y, this.z);
+          this.mesh.position.set(this.x, this.y, this.z);
+          this.mesh.rotation.set(
+            this.rotationX,
+            this.rotationY,
+            this.rotationZ
+          );
+          info.scene.add(this.mesh);
         },
         (xhr) => {
           console.log("loading...");
@@ -37,6 +46,19 @@ export class MeshObject {
           console.log("error!!");
         }
       );
+    } else if (info.mapSrc) {
+      const geometry = new BoxGeometry(this.width, this.height, this.depth);
+      info.loader.load(info.mapSrc, (texture) => {
+        const material = new MeshLambertMaterial({
+          map: texture,
+        });
+        this.mesh = new Mesh(geometry, material);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
+        this.mesh.position.set(this.x, this.y, this.z);
+        this.mesh.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
+        info.scene.add(this.mesh);
+      });
     } else {
       const geometry = new BoxGeometry(this.width, this.height, this.depth);
       const material = new MeshLambertMaterial({
@@ -47,6 +69,7 @@ export class MeshObject {
       this.mesh.castShadow = true;
       this.mesh.receiveShadow = true;
       this.mesh.position.set(this.x, this.y, this.z);
+      this.mesh.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
       info.scene.add(this.mesh);
     }
   }
