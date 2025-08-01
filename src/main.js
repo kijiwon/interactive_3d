@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+// import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MeshObject } from "./MeshObject";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
@@ -31,7 +31,7 @@ camera.position.set(-3, 3, 7);
 scene.add(camera);
 
 // controls
-const controls = new OrbitControls(camera, renderer.domElement);
+// const controls = new OrbitControls(camera, renderer.domElement);
 const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
@@ -136,15 +136,7 @@ const magazine = new MeshObject({
   mapSrc: "/models/magazine.jpg",
 });
 
-// draw
-// 기기마다 함수 실행 간격 맞추기 - clock 사용
-const clock = new THREE.Clock();
-function draw() {
-  renderer.render(scene, camera);
-  window.requestAnimationFrame(draw);
-}
-draw();
-
+// Event
 // resize
 function setLayout() {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -152,3 +144,74 @@ function setLayout() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 window.addEventListener("resize", setLayout);
+
+// camera move
+document.addEventListener("click", () => {
+  canvas.requestPointerLock();
+});
+
+document.addEventListener("pointerlockchange", () => {
+  if (document.pointerLockElement === canvas) {
+    setMode("game");
+  } else {
+    setMode("website");
+  }
+});
+
+let movementX = 0;
+let movementY = 0;
+
+function updateMovementValue(event) {
+  movementX = event.movementX * delta;
+  movementY = event.movementY * delta;
+}
+
+const euler = new THREE.Euler(0, 0, 0, "YXZ");
+// 최소 최대 각
+const minPolarAngle = 0;
+const maxPolarAngle = Math.PI;
+
+function rotateCamera() {
+  euler.setFromQuaternion(camera.quaternion);
+  euler.y -= movementX;
+  euler.x -= movementY;
+
+  euler.x = Math.max(
+    Math.PI / 2 - maxPolarAngle,
+    Math.min(Math.PI / 2 - minPolarAngle, euler.x)
+  );
+
+  // movement 값 줄이기
+  movementX -= movementX * 0.2;
+  movementY -= movementY * 0.2;
+
+  // 0.1보다 작아지면 멈추기
+  if (Math.abs(movementX) < 0.1) movementX = 0;
+  if (Math.abs(movementY) < 0.1) movementY = 0;
+
+  camera.quaternion.setFromEuler(euler);
+}
+
+function setMode(mode) {
+  document.body.dataset.mode = mode;
+
+  // mouse move
+  if (mode === "game") {
+    document.addEventListener("mousemove", updateMovementValue);
+  } else if (mode === "website") {
+    document.removeEventListener("mousemove", updateMovementValue);
+  }
+}
+
+// draw
+// 기기마다 함수 실행 간격 맞추기 - clock 사용
+const clock = new THREE.Clock();
+let delta;
+
+function draw() {
+  delta = clock.getDelta();
+  renderer.render(scene, camera);
+  window.requestAnimationFrame(draw);
+  rotateCamera();
+}
+draw();
