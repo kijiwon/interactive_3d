@@ -58,6 +58,25 @@ const floor = new MeshObject({
   depth: 5,
 });
 
+const wall1 = new MeshObject({
+  scene,
+  name: "wall1",
+  width: 5,
+  height: 3,
+  depth: 0.2,
+  z: -2.4,
+});
+
+const wall2 = new MeshObject({
+  scene,
+  name: "wall2",
+  width: 0.2,
+  height: 3,
+  depth: 4.8,
+  x: 2.4,
+  z: 0.1,
+});
+
 // draw
 // 기기마다 함수 실행 간격 맞추기 - clock 사용
 const clock = new THREE.Clock();

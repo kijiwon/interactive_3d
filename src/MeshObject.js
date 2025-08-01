@@ -16,10 +16,12 @@ export class MeshObject {
     const geometry = new BoxGeometry(this.width, this.height, this.depth);
     const material = new MeshLambertMaterial({
       color: this.color,
-      side: DoubleSide,
+      //   side: DoubleSide,
     });
 
     this.mesh = new Mesh(geometry, material);
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
     this.mesh.position.set(this.x, this.y, this.z);
     info.scene.add(this.mesh);
   }
