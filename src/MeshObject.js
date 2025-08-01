@@ -1,4 +1,4 @@
-import { Mesh, BoxGeometry, MeshLambertMaterial, DoubleSide } from "three";
+import { Mesh, BoxGeometry, MeshLambertMaterial } from "three";
 
 // MeshObject 생성 클래스
 export class MeshObject {
@@ -26,7 +26,6 @@ export class MeshObject {
             if (child.isMesh) {
               // mesh 객체에 그림자 속성 적용
               child.castShadow = true;
-              child.receiveShadow = true;
             }
           });
           glb.scene.position.set(this.x, this.y, this.z);
@@ -42,7 +41,6 @@ export class MeshObject {
       const geometry = new BoxGeometry(this.width, this.height, this.depth);
       const material = new MeshLambertMaterial({
         color: this.color,
-        //   side: DoubleSide,
       });
 
       this.mesh = new Mesh(geometry, material);

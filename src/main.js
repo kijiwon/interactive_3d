@@ -14,6 +14,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1); // 기기에 따라 화면비 설정
 // 그림자 효과
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // scene
 const scene = new THREE.Scene();
@@ -34,8 +35,11 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 // light
 const ambientLight = new THREE.AmbientLight("white", 1);
+
 const pointLight = new THREE.PointLight("white", 100, 100);
 pointLight.castShadow = true;
+pointLight.shadow.mapSize.width = 2048;
+pointLight.shadow.mapSize.height = 2048;
 pointLight.position.y = 10;
 
 scene.add(ambientLight, pointLight);
@@ -93,6 +97,28 @@ const desk = new MeshObject({
   x: 1.2,
   z: -1.9,
   modelSrc: "/models/desk.glb",
+});
+
+const lamp = new MeshObject({
+  scene,
+  loader,
+  name: "lamp",
+  width: 0.5,
+  height: 1.8,
+  depth: 0.5,
+  z: -1.7,
+  modelSrc: "/models/lamp.glb",
+});
+
+const roboticVaccum = new MeshObject({
+  scene,
+  loader,
+  name: "roboticVaccum",
+  width: 0.5,
+  height: 0.1,
+  depth: 0.5,
+  x: -1,
+  modelSrc: "/models/vaccum.glb",
 });
 
 // draw
