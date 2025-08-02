@@ -65,7 +65,7 @@ const defaultContactMaterial = new CANNON.ContactMaterial(
 );
 cannonWorld.defaultContactMaterial = defaultContactMaterial;
 
-const cannonObject = [];
+const cannonObjects = [];
 
 // mesh
 const ground = new MeshObject({
@@ -121,6 +121,7 @@ const desk = new MeshObject({
   cannonWorld,
   loader: gltfLoader,
   cannonMaterial: defaultCannonMaterial,
+  mass: 20,
   name: "desk",
   width: 1.8,
   height: 0.8,
@@ -135,11 +136,13 @@ const lamp = new MeshObject({
   loader: gltfLoader,
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
+  mass: 10,
   name: "lamp",
   width: 0.5,
   height: 1.8,
   depth: 0.5,
   z: -1.7,
+  y: 10,
   modelSrc: "/models/lamp.glb",
 });
 
@@ -148,6 +151,7 @@ const roboticVaccum = new MeshObject({
   loader: gltfLoader,
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
+  mass: 10,
   name: "roboticVaccum",
   width: 0.5,
   height: 0.1,
@@ -161,6 +165,7 @@ const magazine = new MeshObject({
   loader: textureLoader,
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
+  mass: 0.5,
   name: "magazine",
   width: 0.2,
   height: 0.02,
@@ -173,7 +178,7 @@ const magazine = new MeshObject({
 });
 
 // cannon에 영향을 받는 mesh 객체
-cannonObject.push(
+cannonObjects.push(
   ground,
   floor,
   wall1,
@@ -258,6 +263,20 @@ let delta;
 
 function draw() {
   delta = clock.getDelta();
+
+  // 물리 시뮬레이션 업데이트 간격
+  let cannonStepTime = 1 / 60;
+  if (delta < 0.01) cannonStepTime = 1 / 120;
+  cannonWorld.step(cannonStepTime, delta, 3); // 세 번째 인자는 움직임에 차이가 생길 경우 보정을 시도하는 횟수(보통 3으로 설정)
+
+  // 물리 시뮬레이션 적용
+  for (const obj of cannonObjects) {
+    if (obj.cannonBody) {
+      obj.mesh.position.copy(obj.cannonBody.position); // copy 메소드를 사용해 mesh가 cannonBody의 위치를 복사
+      obj.mesh.quaternion.copy(obj.cannonBody.quaternion); // copy 메소드를 사용해 mesh가 cannonBody의 위치를 복사
+    }
+  }
+
   renderer.render(scene, camera);
   window.requestAnimationFrame(draw);
   rotateCamera();

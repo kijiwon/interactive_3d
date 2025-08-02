@@ -14,6 +14,11 @@ export class MeshObject {
     this.differenceY = info.differenceY || 0.4; // floor의 높이만큼 올림
     this.y = info.y || this.height / 2 + this.differenceY; // 모든 mesh는 지면에 닿아있어야함
     this.z = info.z || 0;
+    // x, y, z에 1을 곱해 문자열로 출력되는 오류 막기
+    this.x *= 1;
+    this.y *= 1;
+    this.z *= 1;
+
     this.rotationX = info.rotationX || 0;
     this.rotationY = info.rotationY || 0;
     this.rotationZ = info.rotationZ || 0;
@@ -43,6 +48,7 @@ export class MeshObject {
             this.rotationZ
           );
           info.scene.add(this.mesh);
+          this.setCannonBody(); // mesh 생성 후 cannon body 생성
         },
         (xhr) => {
           console.log("loading...");
@@ -63,6 +69,7 @@ export class MeshObject {
         this.mesh.position.set(this.x, this.y, this.z);
         this.mesh.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
         info.scene.add(this.mesh);
+        this.setCannonBody(); // mesh 생성 후 cannon body 생성
       });
     } else {
       const geometry = new BoxGeometry(this.width, this.height, this.depth);
@@ -76,6 +83,7 @@ export class MeshObject {
       this.mesh.position.set(this.x, this.y, this.z);
       this.mesh.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
       info.scene.add(this.mesh);
+      this.setCannonBody(); // mesh 생성 후 cannon body 생성
     }
   }
 
