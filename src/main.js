@@ -65,9 +65,13 @@ const defaultContactMaterial = new CANNON.ContactMaterial(
 );
 cannonWorld.defaultContactMaterial = defaultContactMaterial;
 
+const cannonObject = [];
+
 // mesh
 const ground = new MeshObject({
   scene,
+  cannonWorld,
+  cannonMaterial: defaultCannonMaterial,
   name: "ground",
   width: 50,
   height: 0.1,
@@ -79,6 +83,8 @@ const ground = new MeshObject({
 
 const floor = new MeshObject({
   scene,
+  cannonWorld,
+  cannonMaterial: defaultCannonMaterial,
   name: "floor",
   width: 5,
   height: 0.4,
@@ -88,6 +94,8 @@ const floor = new MeshObject({
 
 const wall1 = new MeshObject({
   scene,
+  cannonWorld,
+  cannonMaterial: defaultCannonMaterial,
   name: "wall1",
   width: 5,
   height: 3,
@@ -97,6 +105,8 @@ const wall1 = new MeshObject({
 
 const wall2 = new MeshObject({
   scene,
+  cannonWorld,
+  cannonMaterial: defaultCannonMaterial,
   name: "wall2",
   width: 0.2,
   height: 3,
@@ -106,10 +116,11 @@ const wall2 = new MeshObject({
 });
 
 // GLTF model
-
 const desk = new MeshObject({
   scene,
+  cannonWorld,
   loader: gltfLoader,
+  cannonMaterial: defaultCannonMaterial,
   name: "desk",
   width: 1.8,
   height: 0.8,
@@ -122,6 +133,8 @@ const desk = new MeshObject({
 const lamp = new MeshObject({
   scene,
   loader: gltfLoader,
+  cannonWorld,
+  cannonMaterial: defaultCannonMaterial,
   name: "lamp",
   width: 0.5,
   height: 1.8,
@@ -133,6 +146,8 @@ const lamp = new MeshObject({
 const roboticVaccum = new MeshObject({
   scene,
   loader: gltfLoader,
+  cannonWorld,
+  cannonMaterial: defaultCannonMaterial,
   name: "roboticVaccum",
   width: 0.5,
   height: 0.1,
@@ -144,6 +159,8 @@ const roboticVaccum = new MeshObject({
 const magazine = new MeshObject({
   scene,
   loader: textureLoader,
+  cannonWorld,
+  cannonMaterial: defaultCannonMaterial,
   name: "magazine",
   width: 0.2,
   height: 0.02,
@@ -154,6 +171,18 @@ const magazine = new MeshObject({
   z: -2.2,
   mapSrc: "/models/magazine.jpg",
 });
+
+// cannon에 영향을 받는 mesh 객체
+cannonObject.push(
+  ground,
+  floor,
+  wall1,
+  wall2,
+  desk,
+  lamp,
+  roboticVaccum,
+  magazine
+);
 
 // Event
 // resize

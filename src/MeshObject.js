@@ -1,4 +1,5 @@
 import { Mesh, BoxGeometry, MeshLambertMaterial } from "three";
+import { Vec3, Box, Body, Quaternion } from "cannon-es";
 
 // MeshObject 생성 클래스
 export class MeshObject {
@@ -16,6 +17,10 @@ export class MeshObject {
     this.rotationX = info.rotationX || 0;
     this.rotationY = info.rotationY || 0;
     this.rotationZ = info.rotationZ || 0;
+
+    this.mass = info.mass || 0;
+    this.cannonWorld = info.cannonWorld;
+    this.cannonMaterial = info.cannonMaterial;
 
     if (info.modelSrc) {
       // GLTF model
@@ -72,5 +77,16 @@ export class MeshObject {
       this.mesh.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
       info.scene.add(this.mesh);
     }
+  }
+
+  setCannonBody() {
+    this.cannonBody = new Body({
+      mass: this.mass, // 물리 객체의 질량. 0이면 정지 상태
+      position: new Vec3(this.x, this.y, this.z),
+      shape: new Box(new Vec3(this.width / 2, this.height / 2, this.depth / 2)), // 중심 위치(x, y, z)에서 각 표면까지의 거리
+      material: this.cannonMaterial,
+    });
+
+    this.cannonWorld.addBody(this.cannonBody);
   }
 }
