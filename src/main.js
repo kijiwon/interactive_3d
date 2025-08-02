@@ -2,6 +2,7 @@ import * as THREE from "three";
 // import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MeshObject } from "./MeshObject";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import * as CANNON from "cannon-es";
 
 // renderer
 const canvas = document.querySelector("#three-canvas");
@@ -45,6 +46,24 @@ pointLight.shadow.mapSize.height = 2048;
 pointLight.position.y = 10;
 
 scene.add(ambientLight, pointLight);
+
+// cannon(physics)
+const cannonWorld = new CANNON.World();
+cannonWorld.gravity.set(0, -10, 0); // 중력 설정(지구의 중력 가속도는 -9.8)
+
+const defaultCannonMaterial = new CANNON.Material("default");
+// Material 끼리 접촉했을 때
+const defaultContactMaterial = new CANNON.ContactMaterial(
+  defaultCannonMaterial,
+  defaultCannonMaterial,
+  {
+    // 마찰력
+    friction: 1,
+    // 반발력
+    restitution: 0.2,
+  }
+);
+cannonWorld.defaultContactMaterial = defaultContactMaterial;
 
 // mesh
 const ground = new MeshObject({
