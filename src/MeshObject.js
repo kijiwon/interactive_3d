@@ -94,6 +94,11 @@ export class MeshObject {
       shape: new Box(new Vec3(this.width / 2, this.height / 2, this.depth / 2)), // 중심 위치(x, y, z)에서 각 표면까지의 거리
       material: this.cannonMaterial,
     });
+    // 회전 설정
+    this.cannonBody.quaternion.setFromAxisAngle(
+      new Vec3(0, 1, 0), // 축 - y축 기준으로 회전하므로 0,1,0
+      this.rotationY // 회전값
+    );
 
     this.cannonWorld.addBody(this.cannonBody);
   }

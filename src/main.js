@@ -128,6 +128,7 @@ const desk = new MeshObject({
   depth: 0.75,
   x: 1.2,
   z: -1.9,
+  rotationY: 0.5,
   modelSrc: "/models/desk.glb",
 });
 
@@ -273,7 +274,7 @@ function draw() {
   for (const obj of cannonObjects) {
     if (obj.cannonBody) {
       obj.mesh.position.copy(obj.cannonBody.position); // copy 메소드를 사용해 mesh가 cannonBody의 위치를 복사
-      obj.mesh.quaternion.copy(obj.cannonBody.quaternion); // copy 메소드를 사용해 mesh가 cannonBody의 위치를 복사
+      obj.mesh.quaternion.copy(obj.cannonBody.quaternion); // copy 메소드를 사용해 mesh가 cannonBody의 회전을 복사
     }
   }
 
