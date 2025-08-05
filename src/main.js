@@ -224,19 +224,19 @@ document.addEventListener("pointerlockchange", () => {
 function move() {
   if (keyController.keys["KeyW"] || keyController.keys["ArrowUp"]) {
     // forward
-    player.walk(-3, "forward");
+    player.walk(-0.05, "forward");
   }
   if (keyController.keys["KeyS"] || keyController.keys["ArrowDown"]) {
     // backward
-    player.walk(3, "backward");
+    player.walk(0.05, "backward");
   }
   if (keyController.keys["KeyA"] || keyController.keys["ArrowLeft"]) {
     // left
-    player.walk(-3, "left");
+    player.walk(0.05, "left");
   }
   if (keyController.keys["KeyD"] || keyController.keys["ArrowRight"]) {
     // right
-    player.walk(3, "right");
+    player.walk(0.05, "right");
   }
 }
 
@@ -273,6 +273,7 @@ function moveCamera() {
   if (Math.abs(movementY) < 0.1) movementY = 0;
 
   camera.quaternion.setFromEuler(euler);
+  player.rotationY = euler.y; // 카메라가 회전하면 play도 적용
 
   // position
   camera.position.x = player.x;

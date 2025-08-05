@@ -1,4 +1,4 @@
-import { Mesh, BoxGeometry, MeshBasicMaterial } from "three";
+import { Mesh, BoxGeometry, MeshBasicMaterial, MathUtils } from "three";
 import { Vec3, Box, Body, Quaternion } from "cannon-es";
 
 // 화면을 이동하는 player mesh 생성
@@ -40,7 +40,24 @@ export class Player {
   }
 
   walk(value, direction) {
-    console.log(`${direction}, ${value}`);
+    if (direction === "left") {
+      // 뒤쪽 방향에 90도 빼면 왼쪽방향
+      this.rotationY -= MathUtils.degToRad(90);
+    }
+    if (direction === "right") {
+      // 뒤쪽 방향에 90도 더하면 오른쪽방향
+      this.rotationY += MathUtils.degToRad(90);
+    }
+    // 회전각을 구해 회전 적용 + value를 곱해 속도 조절
+    this.x += Math.sin(this.rotationY) * value; // 가로
+    this.z += Math.cos(this.rotationY) * value; // 세로
+
+    if (this.cannonBody) {
+      this.cannonBody.position.x = this.x;
+      this.cannonBody.position.z = this.z;
+      this.mesh.position.x = this.x;
+      this.mesh.position.z = this.z;
+    }
   }
 
   setCannonBody() {
