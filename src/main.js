@@ -128,7 +128,6 @@ const desk = new MeshObject({
   depth: 0.75,
   x: 1.2,
   z: -1.9,
-  rotationY: 0.5,
   modelSrc: "/models/desk.glb",
 });
 

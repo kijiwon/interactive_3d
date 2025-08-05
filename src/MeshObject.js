@@ -94,11 +94,26 @@ export class MeshObject {
       shape: new Box(new Vec3(this.width / 2, this.height / 2, this.depth / 2)), // 중심 위치(x, y, z)에서 각 표면까지의 거리
       material: this.cannonMaterial,
     });
+
     // 회전 설정
-    this.cannonBody.quaternion.setFromAxisAngle(
-      new Vec3(0, 1, 0), // 축 - y축 기준으로 회전하므로 0,1,0
-      this.rotationY // 회전값
-    );
+    // rotation: x
+    const quatX = new Quaternion();
+    const axisX = new Vec3(1, 0, 0); // x축 기준
+    quatX.setFromAxisAngle(axisX, this.rotationX);
+
+    // rotation: y
+    const quatY = new Quaternion();
+    const axisY = new Vec3(0, 1, 0); // y축 기준
+    quatY.setFromAxisAngle(axisY, this.rotationY);
+
+    // rotation: z
+    const quatZ = new Quaternion();
+    const axisZ = new Vec3(0, 0, 1); // z축 기준
+    quatZ.setFromAxisAngle(axisZ, this.rotationZ);
+
+    // quaternion 객체 결합
+    const combinedQuat = quatX.mult(quatY).mult(quatZ);
+    this.cannonBody.quaternion = combinedQuat;
 
     this.cannonWorld.addBody(this.cannonBody);
   }
