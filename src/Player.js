@@ -28,7 +28,8 @@ export class Player {
 
     const geometry = new BoxGeometry(this.width, this.height, this.depth);
     const material = new MeshBasicMaterial({
-      color: this.color,
+      transparent: true,
+      opacity: 0,
     });
 
     this.mesh = new Mesh(geometry, material);
@@ -36,6 +37,10 @@ export class Player {
     this.mesh.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
     info.scene.add(this.mesh);
     this.setCannonBody(); // mesh 생성 후 cannon body 생성
+  }
+
+  walk(value, direction) {
+    console.log(`${direction}, ${value}`);
   }
 
   setCannonBody() {

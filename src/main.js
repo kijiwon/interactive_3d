@@ -2,7 +2,9 @@ import * as THREE from "three";
 // import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { MeshObject } from "./MeshObject";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { KeyController } from "./KeyController";
 import * as CANNON from "cannon-es";
+import { Player } from "./Player";
 
 // renderer
 const canvas = document.querySelector("#three-canvas");
@@ -35,6 +37,7 @@ scene.add(camera);
 // const controls = new OrbitControls(camera, renderer.domElement);
 const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
+const keyController = new KeyController();
 
 // light
 const ambientLight = new THREE.AmbientLight("white", 1);
@@ -177,6 +180,12 @@ const magazine = new MeshObject({
   mapSrc: "/models/magazine.jpg",
 });
 
+const player = new Player({
+  scene,
+  loader: textureLoader,
+  cannonWorld,
+});
+
 // cannon에 영향을 받는 mesh 객체
 cannonObjects.push(
   ground,
@@ -211,6 +220,26 @@ document.addEventListener("pointerlockchange", () => {
   }
 });
 
+// key move
+function move() {
+  if (keyController.keys["KeyW"] || keyController.keys["ArrowUp"]) {
+    // forward
+    player.walk(-3, "forward");
+  }
+  if (keyController.keys["KeyS"] || keyController.keys["ArrowDown"]) {
+    // backward
+    player.walk(3, "backward");
+  }
+  if (keyController.keys["KeyA"] || keyController.keys["ArrowLeft"]) {
+    // left
+    player.walk(-3, "left");
+  }
+  if (keyController.keys["KeyD"] || keyController.keys["ArrowRight"]) {
+    // right
+    player.walk(3, "right");
+  }
+}
+
 let movementX = 0;
 let movementY = 0;
 
@@ -224,7 +253,8 @@ const euler = new THREE.Euler(0, 0, 0, "YXZ");
 const minPolarAngle = 0;
 const maxPolarAngle = Math.PI;
 
-function rotateCamera() {
+function moveCamera() {
+  // rotation
   euler.setFromQuaternion(camera.quaternion);
   euler.y -= movementX;
   euler.x -= movementY;
@@ -243,6 +273,11 @@ function rotateCamera() {
   if (Math.abs(movementY) < 0.1) movementY = 0;
 
   camera.quaternion.setFromEuler(euler);
+
+  // position
+  camera.position.x = player.x;
+  camera.position.y = player.y + 1;
+  camera.position.z = player.z;
 }
 
 function setMode(mode) {
@@ -277,8 +312,13 @@ function draw() {
     }
   }
 
+  // 키보드 이동 적용
+  if (player.cannonBody) {
+    move();
+  }
+
   renderer.render(scene, camera);
   window.requestAnimationFrame(draw);
-  rotateCamera();
+  moveCamera();
 }
 draw();
