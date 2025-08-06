@@ -55,6 +55,8 @@ const cannonWorld = new CANNON.World();
 cannonWorld.gravity.set(0, -10, 0); // 중력 설정(지구의 중력 가속도는 -9.8)
 
 const defaultCannonMaterial = new CANNON.Material("default");
+const playerCannonMaterial = new CANNON.Material("player");
+
 // Material 끼리 접촉했을 때
 const defaultContactMaterial = new CANNON.ContactMaterial(
   defaultCannonMaterial,
@@ -66,7 +68,20 @@ const defaultContactMaterial = new CANNON.ContactMaterial(
     restitution: 0.2,
   }
 );
+
+const playerContactMaterial = new CANNON.ContactMaterial(
+  playerCannonMaterial,
+  defaultCannonMaterial,
+  {
+    // 마찰력
+    friction: 100,
+    // 반발력
+    restitution: 0,
+  }
+);
+
 cannonWorld.defaultContactMaterial = defaultContactMaterial;
+cannonWorld.addContactMaterial(playerContactMaterial);
 
 const cannonObjects = [];
 
@@ -184,8 +199,9 @@ const player = new Player({
   scene,
   loader: textureLoader,
   cannonWorld,
+  cannonMaterial: playerCannonMaterial,
   mass: 50,
-  y: 10,
+  z: 1.5,
 });
 
 // cannon에 영향을 받는 mesh 객체
