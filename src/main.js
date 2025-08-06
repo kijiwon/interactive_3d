@@ -184,6 +184,8 @@ const player = new Player({
   scene,
   loader: textureLoader,
   cannonWorld,
+  mass: 50,
+  y: 10,
 });
 
 // cannon에 영향을 받는 mesh 객체
@@ -315,6 +317,10 @@ function draw() {
 
   // 키보드 이동 적용
   if (player.cannonBody) {
+    player.mesh.position.copy(player.cannonBody.position);
+    player.x = player.cannonBody.position.x;
+    player.y = player.cannonBody.position.y;
+    player.z = player.cannonBody.position.z;
     move();
   }
 

@@ -55,8 +55,6 @@ export class Player {
     if (this.cannonBody) {
       this.cannonBody.position.x = this.x;
       this.cannonBody.position.z = this.z;
-      this.mesh.position.x = this.x;
-      this.mesh.position.z = this.z;
     }
   }
 
