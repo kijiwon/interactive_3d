@@ -74,6 +74,7 @@ export class MeshObject {
           info.scene.add(this.transparentMesh);
 
           this.setCannonBody(); // mesh 생성 후 cannon body 생성
+          if (info.callback) info.callback();
         },
         (xhr) => {
           console.log("loading...");
@@ -143,5 +144,22 @@ export class MeshObject {
     this.cannonBody.quaternion = combinedQuat;
 
     this.cannonWorld.addBody(this.cannonBody);
+  }
+}
+
+// Lamp
+export class Lamp extends MeshObject {
+  constructor(info) {
+    super(info);
+  }
+
+  togglePower() {
+    if (this.light.intensity === 0) {
+      // 불 켜기
+      this.light.intensity = 7;
+    } else {
+      // 불 끄기
+      this.light.intensity = 0;
+    }
   }
 }
