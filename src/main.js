@@ -154,7 +154,7 @@ const lamp = new MeshObject({
   loader: gltfLoader,
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
-  cannonShape: new CANNON.Cylinder(0.25, 0.25, 1.8, 32),
+  cannonShape: new CANNON.Cylinder(0.25, 0.3, 1.8, 32),
   geometry: new THREE.CylinderGeometry(0.25, 0.25, 1.81, 32),
   mass: 10,
   name: "lamp",
