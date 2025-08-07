@@ -161,7 +161,7 @@ const lamp = new MeshObject({
   height: 1.8,
   depth: 0.5,
   z: -1.7,
-  y: 3,
+  // y: 3,
   modelSrc: "/models/lamp.glb",
 });
 

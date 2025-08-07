@@ -1,4 +1,9 @@
-import { Mesh, BoxGeometry, MeshLambertMaterial } from "three";
+import {
+  Mesh,
+  BoxGeometry,
+  MeshLambertMaterial,
+  MeshBasicMaterial,
+} from "three";
 import { Vec3, Box, Body, Quaternion } from "cannon-es";
 
 // MeshObject 생성 클래스
@@ -52,6 +57,22 @@ export class MeshObject {
             this.rotationZ
           );
           info.scene.add(this.mesh);
+          // raycaster 인식 용 mesh 변환
+          const geometry =
+            info.geometry ||
+            new BoxGeometry(this.width, this.height, this.depth);
+          this.transparentMesh = new Mesh(
+            geometry,
+            new MeshBasicMaterial({
+              color: "green",
+              transparent: true,
+              opacity: 0,
+            })
+          );
+          this.transparentMesh.name = this.name;
+          this.transparentMesh.position.set(this.x, this.y, this.z);
+          info.scene.add(this.transparentMesh);
+
           this.setCannonBody(); // mesh 생성 후 cannon body 생성
         },
         (xhr) => {
