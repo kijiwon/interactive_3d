@@ -37,7 +37,7 @@ export class MeshObject {
         info.modelSrc,
         (glb) => {
           this.mesh = glb.scene;
-
+          this.mesh.name = this.name;
           // glb model의 속성을 설정하기 위해 traverse로 모든 자식 객체에 접근
           this.mesh.traverse((child) => {
             if (child.isMesh) {
@@ -68,6 +68,7 @@ export class MeshObject {
           map: texture,
         });
         this.mesh = new Mesh(geometry, material);
+        this.mesh.name = this.name;
         this.mesh.castShadow = true;
         this.mesh.receiveShadow = true;
         this.mesh.position.set(this.x, this.y, this.z);
@@ -82,6 +83,7 @@ export class MeshObject {
       });
 
       this.mesh = new Mesh(geometry, material);
+      this.mesh.name = this.name;
       this.mesh.castShadow = true;
       this.mesh.receiveShadow = true;
       this.mesh.position.set(this.x, this.y, this.z);

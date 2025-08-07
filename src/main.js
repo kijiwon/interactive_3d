@@ -154,14 +154,14 @@ const lamp = new MeshObject({
   loader: gltfLoader,
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
-  cannonShape: new CANNON.Cylinder(0.25, 0.3, 1.8, 32),
+  cannonShape: new CANNON.Cylinder(0.25, 0.25, 1.8, 32),
   mass: 10,
   name: "lamp",
   width: 0.5,
   height: 1.8,
   depth: 0.5,
   z: -1.7,
-  y: 10,
+  y: 3,
   modelSrc: "/models/lamp.glb",
 });
 
@@ -229,7 +229,7 @@ window.addEventListener("resize", setLayout);
 
 // camera move
 document.addEventListener("click", () => {
-  canvas.requestPointerLock();
+  // canvas.requestPointerLock();
 });
 
 document.addEventListener("pointerlockchange", () => {
@@ -238,6 +238,26 @@ document.addEventListener("pointerlockchange", () => {
   } else {
     setMode("website");
   }
+});
+
+// Raycasting - 클릭 감지
+// 마우스 좌표
+const mouse = new THREE.Vector2(); // 기본값 0, 0
+const raycaster = new THREE.Raycaster();
+function checkIntersects() {
+  raycaster.setFromCamera(mouse, camera);
+
+  const intersects = raycaster.intersectObjects(scene.children);
+  for (const item of intersects) {
+    console.log(item.object.name); // 광선 맞은 item 확인
+  }
+}
+
+canvas.addEventListener("click", (event) => {
+  // 화면 중앙을 0으로 두고  -1(좌) 1(상) 1(우) -1(하)로 설정
+  mouse.x = (event.clientX / canvas.clientWidth) * 2 - 1;
+  mouse.y = -((event.clientY / canvas.clientHeight) * 2 - 1);
+  checkIntersects();
 });
 
 // key move
