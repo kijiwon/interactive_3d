@@ -23,7 +23,11 @@ export class MeshObject {
     this.rotationY = info.rotationY || 0;
     this.rotationZ = info.rotationZ || 0;
 
-    this.mass = info.mass || 0;
+    // mesh에 따라 shape 생성
+    (this.cannonShape =
+      info.cannonShape ||
+      new Box(new Vec3(this.width / 2, this.height / 2, this.depth / 2))), // 중심 위치(x, y, z)에서 각 표면까지의 거리;
+      (this.mass = info.mass || 0);
     this.cannonWorld = info.cannonWorld;
     this.cannonMaterial = info.cannonMaterial;
 
@@ -91,7 +95,7 @@ export class MeshObject {
     this.cannonBody = new Body({
       mass: this.mass, // 물리 객체의 질량. 0이면 정지 상태
       position: new Vec3(this.x, this.y, this.z),
-      shape: new Box(new Vec3(this.width / 2, this.height / 2, this.depth / 2)), // 중심 위치(x, y, z)에서 각 표면까지의 거리
+      shape: this.cannonShape,
       material: this.cannonMaterial,
     });
 

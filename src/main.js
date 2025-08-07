@@ -154,6 +154,7 @@ const lamp = new MeshObject({
   loader: gltfLoader,
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
+  cannonShape: new CANNON.Cylinder(0.25, 0.25, 1.8, 32),
   mass: 10,
   name: "lamp",
   width: 0.5,
@@ -169,6 +170,7 @@ const roboticVaccum = new MeshObject({
   loader: gltfLoader,
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
+  cannonShape: new CANNON.Cylinder(0.25, 0.25, 0.1, 32),
   mass: 10,
   name: "roboticVaccum",
   width: 0.5,
@@ -291,7 +293,7 @@ function moveCamera() {
   if (Math.abs(movementY) < 0.1) movementY = 0;
 
   camera.quaternion.setFromEuler(euler);
-  player.rotationY = euler.y; // 카메라가 회전하면 play도 적용
+  player.rotationY = euler.y; // 카메라가 회전하면 player도 적용
 
   // position
   camera.position.x = player.x;

@@ -49,8 +49,8 @@ export class Player {
       this.rotationY += MathUtils.degToRad(90);
     }
     // 회전각을 구해 회전 적용 + value를 곱해 속도 조절
-    this.x += Math.sin(this.rotationY) * value; // 가로
-    this.z += Math.cos(this.rotationY) * value; // 세로
+    this.x += Math.sin(this.rotationY) * value; // 좌우
+    this.z += Math.cos(this.rotationY) * value; // 앞뒤
 
     if (this.cannonBody) {
       this.cannonBody.position.x = this.x;
