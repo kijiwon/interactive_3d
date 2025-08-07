@@ -163,3 +163,27 @@ export class Lamp extends MeshObject {
     }
   }
 }
+
+export class RoboticVaccum extends MeshObject {
+  constructor(info) {
+    super(info);
+    this.powerOn = false;
+    this.r = 0; //  이동 반경
+    this.angle = 0;
+    this.originX = this.x; // 초기 위치
+    this.originZ = this.z; // 초기 위치
+  }
+
+  togglePower() {
+    this.powerOn = !this.powerOn;
+  }
+
+  move() {
+    if (this.powerOn) {
+      this.cannonBody.position.x = this.originX + Math.cos(this.angle) * this.r; // 초기 위치 x에서 원운동
+      this.cannonBody.position.z = this.originZ + Math.sin(this.angle) * this.r; // 초기 위치 z에서 원운동
+      this.angle += 0.005; // 각도 증가량을 조절해 속도 제어
+      this.r = Math.sin(this.angle * 2); // 이동 반경은 계속 변화
+    }
+  }
+}
