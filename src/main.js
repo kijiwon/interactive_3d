@@ -155,6 +155,7 @@ const lamp = new MeshObject({
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
   cannonShape: new CANNON.Cylinder(0.25, 0.25, 1.8, 32),
+  geometry: new THREE.CylinderGeometry(0.25, 0.25, 1.81, 32),
   mass: 10,
   name: "lamp",
   width: 0.5,
@@ -171,6 +172,7 @@ const roboticVaccum = new MeshObject({
   cannonWorld,
   cannonMaterial: defaultCannonMaterial,
   cannonShape: new CANNON.Cylinder(0.25, 0.25, 0.1, 32),
+  geometry: new THREE.CylinderGeometry(0.25, 0.25, 0.11, 32),
   mass: 10,
   name: "roboticVaccum",
   width: 0.5,
@@ -229,7 +231,7 @@ window.addEventListener("resize", setLayout);
 
 // camera move
 document.addEventListener("click", () => {
-  // canvas.requestPointerLock();
+  canvas.requestPointerLock();
 });
 
 document.addEventListener("pointerlockchange", () => {
@@ -250,14 +252,31 @@ function checkIntersects() {
   const intersects = raycaster.intersectObjects(scene.children);
   for (const item of intersects) {
     console.log(item.object.name); // 광선 맞은 item 확인
+    if (item.object.name === "lamp") {
+      break;
+    } else if (item.object.name === "roboticVaccum") {
+      break;
+    } else if (item.object.name === "desk") {
+      break;
+    } else if (item.object.name === "magazine") {
+      break;
+    }
   }
 }
 
 canvas.addEventListener("click", (event) => {
+  // mobile 버전
   // 화면 중앙을 0으로 두고  -1(좌) 1(상) 1(우) -1(하)로 설정
-  mouse.x = (event.clientX / canvas.clientWidth) * 2 - 1;
-  mouse.y = -((event.clientY / canvas.clientHeight) * 2 - 1);
-  checkIntersects();
+  // mouse.x = (event.clientX / canvas.clientWidth) * 2 - 1;
+  // mouse.y = -((event.clientY / canvas.clientHeight) * 2 - 1);
+  // checkIntersects();
+
+  // desktop에서는 화면 중앙이 고정된 상태
+  mouse.x = 0;
+  mouse.y = 0;
+  if (document.body.dataset.mode === "game") {
+    checkIntersects();
+  }
 });
 
 // key move
@@ -350,6 +369,12 @@ function draw() {
     if (obj.cannonBody) {
       obj.mesh.position.copy(obj.cannonBody.position); // copy 메소드를 사용해 mesh가 cannonBody의 위치를 복사
       obj.mesh.quaternion.copy(obj.cannonBody.quaternion); // copy 메소드를 사용해 mesh가 cannonBody의 회전을 복사
+
+      // mesh가 움직이고 난 후 cannonMesh도 함께 이동
+      if (obj.transparentMesh) {
+        obj.transparentMesh.position.copy(obj.cannonBody.position); // copy 메소드를 사용해 mesh가 cannonBody의 위치를 복사
+        obj.transparentMesh.quaternion.copy(obj.cannonBody.quaternion); // copy 메소드를 사용해 mesh가 cannonBody의 회전을 복사
+      }
     }
   }
 
