@@ -230,6 +230,21 @@ cannonObjects.push(
   magazine
 );
 
+// device 확인
+let device;
+function setDevice() {
+  const htmlElem = document.querySelector("html");
+
+  if ("ontouchstart" in document.documentElement && window.innerWidth < 1300) {
+    // mobile
+    device = "mobile";
+    htmlElem.classList.add("touchevents"); // css 설정
+  } else {
+    device = "desktop";
+    htmlElem.classList.add("no-touchevents"); // css 설정
+  }
+}
+
 // Event
 // resize
 function setLayout() {
@@ -405,4 +420,7 @@ function draw() {
   renderer.render(scene, camera);
   window.requestAnimationFrame(draw);
 }
+
+setDevice();
+setMode("website");
 draw();
