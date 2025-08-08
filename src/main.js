@@ -256,6 +256,7 @@ window.addEventListener("resize", setLayout);
 
 // camera move
 document.addEventListener("click", () => {
+  if (device === "mobile") return; // 모바일 환경에서는 실행x
   canvas.requestPointerLock();
 });
 
@@ -292,17 +293,19 @@ function checkIntersects() {
 }
 
 canvas.addEventListener("click", (event) => {
-  // mobile 버전
-  // 화면 중앙을 0으로 두고  -1(좌) 1(상) 1(우) -1(하)로 설정
-  // mouse.x = (event.clientX / canvas.clientWidth) * 2 - 1;
-  // mouse.y = -((event.clientY / canvas.clientHeight) * 2 - 1);
-  // checkIntersects();
-
-  // desktop에서는 화면 중앙이 고정된 상태
-  mouse.x = 0;
-  mouse.y = 0;
-  if (document.body.dataset.mode === "game") {
+  if (device === "mobile") {
+    // mobile 버전
+    // 화면 중앙을 0으로 두고  -1(좌) 1(상) 1(우) -1(하)로 설정
+    mouse.x = (event.clientX / canvas.clientWidth) * 2 - 1;
+    mouse.y = -((event.clientY / canvas.clientHeight) * 2 - 1);
     checkIntersects();
+  } else {
+    // desktop에서는 화면 중앙이 고정된 상태
+    mouse.x = 0;
+    mouse.y = 0;
+    if (document.body.dataset.mode === "game") {
+      checkIntersects();
+    }
   }
 });
 
