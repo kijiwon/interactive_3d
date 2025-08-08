@@ -40,3 +40,41 @@ body {
 body[data-mode="game"] .target-marker {
   display: block;
 }
+
+/* mobile controller */
+.no-touchevents .mobile-controller {
+  display: none;
+}
+
+.mobile-controller {
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  width: 151px;
+  height: 151px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.mobile-controller::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 131px;
+  height: 131px;
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
+/* 방향 조정 바 */
+.mobile-controller-bar {
+  position: absolute;
+  left: 75px;
+  top: 10px;
+  width: 1px;
+  height: 66px;
+  background-color: white;
+  /* 아래 부분 중심으로 회전 */
+  transform-origin: bottom;
+}
