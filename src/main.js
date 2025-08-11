@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { Lamp, MeshObject, RoboticVaccum } from "./MeshObject";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { KeyController } from "./KeyController";
+import { TouchController } from "./TouchController";
 import * as CANNON from "cannon-es";
 import { Player } from "./Player";
 
@@ -38,6 +39,7 @@ scene.add(camera);
 const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 const keyController = new KeyController();
+const touchController = new TouchController();
 
 // light
 const ambientLight = new THREE.AmbientLight("white", 1);
@@ -277,7 +279,7 @@ function checkIntersects() {
 
   const intersects = raycaster.intersectObjects(scene.children);
   for (const item of intersects) {
-    console.log(item.object.name); // 광선 맞은 item 확인
+    // console.log(item.object.name); // 광선 맞은 item 확인
     if (item.object.name === "lamp") {
       lamp.togglePower();
       break;
@@ -427,3 +429,56 @@ function draw() {
 setDevice();
 setMode("website");
 draw();
+
+// touch control
+const touchX = [];
+const touchY = [];
+window.addEventListener("touchstart", (event) => {
+  // 컨트롤러 터치 감지 ->
+  if (event.target === touchController.elem) return;
+
+  movementX = 0;
+  movementY = 0;
+  // 처음 터치 좌표
+  touchX[0] = event.targetTouches[0].clientX;
+  touchX[1] = event.targetTouches[0].clientX;
+  touchY[0] = event.targetTouches[0].clientY;
+  touchY[1] = event.targetTouches[0].clientY;
+});
+
+window.addEventListener("touchmove", (event) => {
+  if (event.target === touchController.elem) return;
+
+  movementX = 0;
+  if (event.target === touchController.elem) return;
+  movementY = 0;
+
+  touchX[0] = touchX[1];
+  touchX[1] = event.targetTouches[0].clientX; // 새로운 터치 좌표
+  touchY[0] = touchY[1];
+  touchY[1] = event.targetTouches[0].clientY;
+
+  // 움직인 거리 계산
+  movementX = touchX[1] - touchX[0];
+  movementY = touchY[1] - touchY[0];
+});
+
+window.addEventListener("touchend", (event) => {
+  if (event.target === touchController.elem) return;
+  // 초기화
+  movementX = 0;
+  movementY = 0;
+  touchX[0] = touchX[1] = 0;
+  touchY[0] = touchY[1] = 0;
+});
+
+// 두 손가락 터치 - 기본 동작을 막아 오류 방지
+window.addEventListener("gesturestart", (event) => {
+  event.preventDefault();
+});
+window.addEventListener("gesturechange", (event) => {
+  event.preventDefault();
+});
+window.addEventListener("gestureend", (event) => {
+  event.preventDefault();
+});
