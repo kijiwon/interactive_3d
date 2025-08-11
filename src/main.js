@@ -345,10 +345,14 @@ const minPolarAngle = 0;
 const maxPolarAngle = Math.PI;
 
 function moveCamera() {
+  // 카메라 회전 속도 조절
+  let factor = delta * 50;
+  if (device === "mobile") factor = delta;
+
   // rotation
   euler.setFromQuaternion(camera.quaternion);
-  euler.y -= movementX;
-  euler.x -= movementY;
+  euler.y -= movementX * factor;
+  euler.x -= movementY * factor;
 
   euler.x = Math.max(
     Math.PI / 2 - maxPolarAngle,
