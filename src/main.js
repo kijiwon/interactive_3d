@@ -250,6 +250,11 @@ function setDevice() {
 // Event
 // resize
 function setLayout() {
+  setDevice();
+  if (device === "mobile") {
+    touchController.setPosition();
+  }
+
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -329,6 +334,13 @@ function move() {
     // right
     player.walk(0.05, "right");
   }
+}
+
+// 모바일 이동
+function moveMobile() {
+  if (!touchController.walkTouch) return;
+
+  touchController.setAngleOfBar(Math.PI / 4);
 }
 
 let movementX = 0;
@@ -420,7 +432,12 @@ function draw() {
     player.x = player.cannonBody.position.x;
     player.y = player.cannonBody.position.y;
     player.z = player.cannonBody.position.z;
-    move();
+
+    if (device === "mobile") {
+      moveMobile();
+    } else {
+      move();
+    }
   }
 
   moveCamera();
