@@ -339,8 +339,14 @@ function move() {
 // 모바일 이동
 function moveMobile() {
   if (!touchController.walkTouch) return;
+  const cx = touchController.cx;
+  const cy = touchController.cy;
+  // cx와 cy 사이의 각도
+  const yy = touchController.walkTouch.clientY - cy; // y좌표의 차
+  const xx = touchController.walkTouch.clientX - cx; // x좌표의 차
+  const angle = Math.atan2(yy, xx);
 
-  touchController.setAngleOfBar(Math.PI / 4);
+  touchController.setAngleOfBar(angle);
 }
 
 let movementX = 0;

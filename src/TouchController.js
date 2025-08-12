@@ -34,6 +34,6 @@ export class TouchController {
 
   // bar 각도 조절
   setAngleOfBar(radian) {
-    this.bar.style.transform = `rotate(${(radian * 180) / Math.PI}deg)`;
+    this.bar.style.transform = `rotate(${(radian * 180) / Math.PI + 90}deg)`;
   }
 }
