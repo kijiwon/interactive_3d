@@ -344,9 +344,13 @@ function moveMobile() {
   // cx와 cy 사이의 각도
   const yy = touchController.walkTouch.clientY - cy; // y좌표의 차
   const xx = touchController.walkTouch.clientX - cx; // x좌표의 차
-  const angle = Math.atan2(yy, xx);
+  const angle = Math.atan2(-yy, xx);
+  const angle2 = Math.atan2(yy, xx);
 
-  touchController.setAngleOfBar(angle);
+  // player 이동
+  player.walkMobile(delta, angle);
+
+  touchController.setAngleOfBar(angle2);
 }
 
 let movementX = 0;
