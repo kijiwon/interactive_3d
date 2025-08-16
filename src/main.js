@@ -369,7 +369,7 @@ const maxPolarAngle = Math.PI;
 function moveCamera() {
   // 카메라 회전 속도 조절
   let factor = delta * 50;
-  if (device === "mobile") factor = delta;
+  if (device === "mobile") factor = delta * 0.3;
 
   // rotation
   euler.setFromQuaternion(camera.quaternion);
