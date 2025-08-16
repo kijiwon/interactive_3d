@@ -1,5 +1,10 @@
 body {
   margin: 0;
+  overflow: hidden;
+
+  /* 터치 지속 시 확대 방지 */
+  user-select: none;
+  -webkit-user-select: none;
 }
 #three-canvas {
   position: absolute;
