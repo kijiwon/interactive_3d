@@ -60,8 +60,8 @@ export class Player {
 
   walkMobile(value, radian) {
     const angle = this.rotationY + radian + MathUtils.degToRad(90);
-    this.x = Math.sin(angle) * value;
-    this.z = Math.cos(angle) * value;
+    this.x += Math.sin(angle) * value;
+    this.z += Math.cos(angle) * value;
 
     this.cannonBody.position.x = this.x;
     this.cannonBody.position.z = this.z;

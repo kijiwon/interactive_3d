@@ -2,7 +2,7 @@ export class TouchController {
   constructor() {
     this.elem = document.querySelector(".mobile-controller");
     this.bar = this.elem.querySelector(".mobile-controller-bar");
-    console.log(this.bar);
+    // console.log(this.bar);
     this.setPosition();
     this.elem.addEventListener("touchstart", (event) => {
       this.walkTouch = event.targetTouches[0];

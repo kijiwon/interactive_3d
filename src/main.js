@@ -465,7 +465,7 @@ draw();
 const touchX = [];
 const touchY = [];
 window.addEventListener("touchstart", (event) => {
-  // 컨트롤러 터치 감지 ->
+  // 컨트롤러 터치 감지 -> 따로 처리
   if (event.target === touchController.elem) return;
 
   movementX = 0;
